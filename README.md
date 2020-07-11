@@ -1,3 +1,3 @@
 # Linux
 
-This is Matthew's Linux repository
+Matthew's Linux Repository

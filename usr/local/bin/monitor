@@ -1,0 +1,64 @@
+#!/bin/bash
+#
+# Creates a list of output from ps for a particular process.
+
+# Make sure we have a process id to monitor.
+
+if [ -z "$1" ] || [ ! -z "$2" ]; then
+     echo "Usage: monitor <process id> [> file.txt] [&]"
+     exit 1
+fi
+
+# Program to use to monitor the process:
+
+PROGRAM="/usr/bin/ps"
+
+# Program command line options to use:
+
+OPTIONS="lwwp"
+
+# Program to provide the delay between checks:
+
+SLEEP="/usr/bin/sleep"
+
+# Set the delay interval between checks.
+
+DELAY="10s"
+
+# Set an initial exit code to enter the while loop.
+
+CODE=0
+
+# Set some initial flags.
+
+FLAG=1
+SUCCESS=0
+
+# Only run while the specified process exists.
+
+while [ $CODE == 0 ]; do
+
+     "$PROGRAM" "$OPTIONS" "$1"
+
+     CODE=$?
+
+     if [ $CODE == 0 ]; then
+          echo ""
+          "$SLEEP" "$DELAY"
+
+          if [ $FLAG == 1 ]; then
+               FLAG=0
+               SUCCESS=1
+          fi
+
+     fi
+
+done
+
+if [ $SUCCESS == 1 ]; then
+     exit 0
+else
+     exit $CODE
+fi
+
+# EOF
